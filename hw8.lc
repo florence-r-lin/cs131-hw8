@@ -98,42 +98,43 @@ Y = (\f. ((\x.(f (x x))) (\x. (f (x x)))));
 
 # 1. Leq  (for church numerals)
 
-Leq = 0;
+Leq = (\m. (\n. (IsZero ((Monus m) n))));
 
 
 # 2. Equal  (for church numerals)
 
-Equal = 0;
+Equal = (\m. (\n. ((And ((Leq m) n)) ((Leq n) m))));
 
 
 # 3. Maybe
 
-Nothing = 0;
-Just = 0;
+Nothing = (\a.(\b.a));
+Just = (\v. (\n. (\m. (m v))));
 
 
 # 4. Lists revisited
 
-Nil = 0;
-Cons = 0;
+Nil = (\a.(\b.a));
+Cons = (\h. (\t. (\n. (\c. ((c h) t)))));
 
 
   # For the next three, we want functions that take one list and apply it to two
   # appropriate arguments.
-IsEmpty = 0;
-Head = 0;
-Tail = 0;
+IsEmpty = (\l. ((l True) False));
+Head = (\l. ((l Nil) (\h. (\t. h))));
+Tail = (\l. ((l Nil) (\h. (\t. t))));
 
 
 # 5. Trees
 
-Leaf = 0;
-Branch = 0;
+Leaf = (\l.(\b.l));
+Branch = (\v. (\l. (\r. (\wl. (\wb. (((wb v) l) r))))));
 
 
 # 6. Fibonacci without recursion
 
-Fib = 0;
+Fib = (\n. (Fst ((n NextFib) ((Pair 0) 1))));
+NextFib = (\p. ((Pair (Snd p)) ((Plus (Snd p)) (Fst p))));
 
 
 # 7. 3n+1
